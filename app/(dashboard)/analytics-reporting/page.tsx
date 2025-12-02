@@ -66,26 +66,26 @@ export default function AnalyticsReportingPage() {
       <div className="min-h-screen text-white relative overflow-hidden star">
         <div className="absolute inset-0 bg-[url('/stars.svg')] opacity-20 pointer-events-none" />
 
-        <div className="relative z-10 p-8">
-          <div className="bg-card backdrop-blur-sm rounded-2xl p-8 flex flex-col gap-8 border border-white/10 shadow-2xl">
+        <div className="relative z-10 p-4 md:p-8">
+          <div className="bg-card backdrop-blur-sm rounded-2xl p-4 md:p-8 flex flex-col gap-6 md:gap-8 border border-white/10 shadow-2xl">
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
-                <h1 className="text-4xl font-bold text-white">Analytics & Reporting</h1>
-                <p className="text-gray-400 text-sm mt-2">Comprehensive usage and performance metrics</p>
+                <h1 className="text-2xl md:text-4xl font-bold text-white">Analytics & Reporting</h1>
+                <p className="text-gray-400 text-xs md:text-sm mt-2">Comprehensive usage and performance metrics</p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 w-full md:w-auto">
                 <select
                   value={dateRange}
                   onChange={(e) => setDateRange(e.target.value)}
-                  className="bg-white/10 border border-white/20 px-4 py-2 rounded-lg text-white text-sm focus:outline-none focus:border-primary/50 transition-all duration-200"
+                  className="bg-white/10 border border-white/20 px-3 md:px-4 py-1.5 md:py-2 rounded-lg text-white text-xs md:text-sm focus:outline-none focus:border-primary/50 transition-all duration-200 flex-1 md:flex-none"
                 >
                   <option value="7days">Last 7 Days</option>
                   <option value="30days">Last 30 Days</option>
                   <option value="90days">Last 90 Days</option>
                   <option value="year">This Year</option>
                 </select>
-                <button className="bg-primary hover:bg-primary/80 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-2">
+                <button className="bg-primary hover:bg-primary/80 text-white px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg flex items-center gap-1 md:gap-2 text-xs md:text-sm justify-center flex-1 md:flex-none">
                   <Download size={18} />
                   Export
                 </button>
@@ -93,8 +93,8 @@ export default function AnalyticsReportingPage() {
             </div>
 
             {/* Client Portal Usage */}
-            <div className="bg-gradient-to-br from-white/15 to-white/5 rounded-xl border border-white/10 shadow-lg p-6">
-              <h2 className="text-xl font-semibold text-white mb-4">Client Portal Usage</h2>
+            <div className="bg-gradient-to-br from-white/15 to-white/5 rounded-xl border border-white/10 shadow-lg p-4 md:p-6">
+              <h2 className="text-lg md:text-xl font-semibold text-white mb-4">Client Portal Usage</h2>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={clientUsageData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />

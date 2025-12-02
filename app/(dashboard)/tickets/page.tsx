@@ -134,17 +134,17 @@ export default function TicketsPage() {
       <div className="min-h-screen text-white relative overflow-hidden star">
         <div className="absolute inset-0 bg-[url('/stars.svg')] opacity-20 pointer-events-none" />
 
-        <div className="relative z-10 p-8">
-          <div className="bg-card backdrop-blur-sm rounded-2xl p-8 flex flex-col gap-8 border border-white/10 shadow-2xl">
+        <div className="relative z-10 p-4 md:p-8">
+          <div className="bg-card backdrop-blur-sm rounded-2xl p-4 md:p-8 flex flex-col gap-6 md:gap-8 border border-white/10 shadow-2xl">
             {/* Header */}
             <div>
-              <h1 className="text-4xl font-bold text-white">Tickets</h1>
-              <p className="text-gray-400 text-sm mt-2">Manage and resolve support tickets</p>
+              <h1 className="text-2xl md:text-4xl font-bold text-white">Tickets</h1>
+              <p className="text-gray-400 text-xs md:text-sm mt-2">Manage and resolve support tickets</p>
             </div>
 
-            <div className="flex gap-6">
+            <div className="flex flex-col lg:flex-row gap-4 md:gap-6">
               {/* Left - Ticket List */}
-              <div className="basis-[35%] flex flex-col gap-4">
+              <div className="lg:basis-[35%] flex flex-col gap-4">
                 {/* Search & Filters */}
                 <div className="flex flex-col gap-3">
                   <div className="relative">
@@ -223,20 +223,20 @@ export default function TicketsPage() {
 
               {/* Right - Ticket Details */}
               {selectedTicket ? (
-                <div className="basis-[65%] bg-gradient-to-br from-white/15 to-white/5 rounded-xl border border-white/10 shadow-lg p-6 flex flex-col gap-6">
+                <div className="lg:basis-[65%] bg-gradient-to-br from-white/15 to-white/5 rounded-xl border border-white/10 shadow-lg p-4 md:p-6 flex flex-col gap-4 md:gap-6">
                   {/* Header */}
                   <div className="border-b border-white/10 pb-4">
-                    <div className="flex items-start justify-between mb-4">
+                    <div className="flex flex-col sm:flex-row items-start justify-between gap-3 mb-4">
                       <div>
-                        <h2 className="text-2xl font-bold text-white">{selectedTicket.ticket_id}</h2>
-                        <p className="text-gray-400 text-sm mt-1">{selectedTicket.subject}</p>
+                        <h2 className="text-xl md:text-2xl font-bold text-white">{selectedTicket.ticket_id}</h2>
+                        <p className="text-gray-400 text-xs md:text-sm mt-1">{selectedTicket.subject}</p>
                       </div>
-                      <span className={`text-sm px-3 py-1 rounded-lg border font-medium ${statusColors[selectedTicket.status]}`}>
+                      <span className={`text-xs md:text-sm px-3 py-1 rounded-lg border font-medium ${statusColors[selectedTicket.status]}`}>
                         {selectedTicket.status}
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <p className="text-xs text-gray-500 mb-1">Client</p>
                         <p className="text-white font-medium">{selectedTicket.client_name}</p>

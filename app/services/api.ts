@@ -21,7 +21,7 @@ async function apiCall<T>(
     ...(token && { "Authorization": `Bearer ${token}` }),
     ...options.headers,
   };
-
+  console.log(headers)
   try {
     const response = await fetch(url, {
       ...options,
