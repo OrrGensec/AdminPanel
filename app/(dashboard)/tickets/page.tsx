@@ -20,82 +20,8 @@ const priorityColors: Record<TicketPriority, string> = {
   urgent: "text-red-400",
 };
 
-// Sample data - will be replaced with API calls
-const sampleTickets: TicketListItem[] = [
-  {
-    id: 1,
-    ticket_id: "TKT-001",
-    subject: "Unable to access resources",
-    status: "new",
-    priority: "high",
-    source: "ai_escalation",
-    client_name: "John Doe",
-    client_company: "Acme Corp",
-    assigned_to_name: "Sarah Johnson",
-    messages_count: 3,
-    created_at: "2024-11-28T10:30:00Z",
-    updated_at: "2024-11-28T14:20:00Z",
-  },
-  {
-    id: 2,
-    ticket_id: "TKT-002",
-    subject: "Question about deployment stage",
-    status: "in_progress",
-    priority: "normal",
-    source: "manual_request",
-    client_name: "Jane Smith",
-    client_company: "Tech Solutions",
-    assigned_to_name: "Mike Brown",
-    messages_count: 5,
-    created_at: "2024-11-27T09:15:00Z",
-    updated_at: "2024-11-28T11:00:00Z",
-  },
-  {
-    id: 3,
-    ticket_id: "TKT-003",
-    subject: "Meeting reschedule request",
-    status: "waiting",
-    priority: "normal",
-    source: "ai_escalation",
-    client_name: "Ahmed Hassan",
-    client_company: "Global Inc",
-    assigned_to_name: "Lisa Chen",
-    messages_count: 2,
-    created_at: "2024-11-26T15:45:00Z",
-    updated_at: "2024-11-27T10:30:00Z",
-  },
-  {
-    id: 4,
-    ticket_id: "TKT-004",
-    subject: "Template download issue",
-    status: "resolved",
-    priority: "low",
-    source: "manual_request",
-    client_name: "Sarah Johnson",
-    client_company: "Creative Agency",
-    assigned_to_name: "Tom Wilson",
-    messages_count: 4,
-    created_at: "2024-11-25T08:00:00Z",
-    updated_at: "2024-11-26T16:45:00Z",
-  },
-  {
-    id: 5,
-    ticket_id: "TKT-005",
-    subject: "AI chat not responding",
-    status: "new",
-    priority: "urgent",
-    source: "ai_escalation",
-    client_name: "Mike Brown",
-    client_company: "StartUp Labs",
-    assigned_to_name: "Unassigned",
-    messages_count: 1,
-    created_at: "2024-11-24T12:30:00Z",
-    updated_at: "2024-11-24T12:30:00Z",
-  },
-];
-
 export default function TicketsPage() {
-  const [tickets, setTickets] = useState<TicketListItem[]>(sampleTickets);
+  const [tickets, setTickets] = useState<TicketListItem[]>([]);
   const [selectedTicket, setSelectedTicket] = useState<TicketListItem | null>(null);
   const [filterStatus, setFilterStatus] = useState<TicketStatus | "all">("all");
   const [filterPriority, setFilterPriority] = useState<TicketPriority | "all">("all");

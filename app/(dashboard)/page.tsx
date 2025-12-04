@@ -84,7 +84,7 @@ function page() {
 
             {/* Key Metrics */}
             {metrics && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                 <div className="bg-gradient-to-br from-primary/20 to-primary/5 rounded-xl p-6 border border-primary/20 shadow-lg hover:shadow-xl transition-shadow duration-200">
                   <div className="flex items-center gap-3">
                     <div className="bg-primary/30 w-12 h-12 rounded-full flex items-center justify-center">
@@ -124,7 +124,7 @@ function page() {
                   </div>
                 </div>
 
-                <div className="bg-gradient-to-br from-purple-500/20 to-purple-500/5 rounded-xl p-6 border border-purple-500/20 shadow-lg hover:shadow-xl transition-shadow duration-200">
+                {/* <div className="bg-gradient-to-br from-purple-500/20 to-purple-500/5 rounded-xl p-6 border border-purple-500/20 shadow-lg hover:shadow-xl transition-shadow duration-200">
                   <div className="flex items-center gap-3">
                     <div className="bg-purple-500/30 w-12 h-12 rounded-full flex items-center justify-center">
                       <MessageSquare className="w-6 h-6 text-purple-400" />
@@ -135,7 +135,7 @@ function page() {
                       <p className="text-purple-400 text-xs mt-1">{metrics.escalation_rate}% escalated</p>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             )}
 
