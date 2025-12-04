@@ -13,6 +13,7 @@ import {
   Bell,
   Lock,
   LogOut,
+  CreditCard,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ForwardRefExoticComponent, RefAttributes, useState } from "react";
@@ -42,24 +43,36 @@ const navigationItems: ItemType[] = [
     active: false,
     value: "schedule-meetings",
   },
-  {
-    icon: MessageSquare,
-    label: "AI & Chat Oversight",
-    active: false,
-    value: "ai-oversight",
-  },
+  // {
+  //   icon: MessageSquare,
+  //   label: "AI & Chat Oversight",
+  //   active: false,
+  //   value: "ai-oversight",
+  // },
   {
     icon: BarChart3,
-    label: "Analytics & Reporting",
+    label: "SEO & Analytics",
     active: false,
     value: "seo-and-analytics",
   },
   // { icon: Lock, label: "Audit & Compliance", active: false, value: "audit-logs" }, // TODO: Add API integration
   {
+    icon: CreditCard,
+    label: "Payment Management",
+    active: false,
+    value: "payment-management",
+  },
+  {
     icon: Bell,
     label: "Notifications",
     active: false,
     value: "notifications",
+  },
+  {
+    icon: BarChart3,
+    label: "Analytics & Reporting",
+    active: false,
+    value: "analytics-reporting",
   },
   { icon: Settings2, label: "Settings", active: false, value: "settings" },
 ];
