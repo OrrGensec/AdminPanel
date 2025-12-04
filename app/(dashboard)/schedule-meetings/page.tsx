@@ -182,31 +182,49 @@ function page() {
                 {/* React Big Calendar */}
                 <div className="flex-1 bg-white/5 rounded-lg overflow-x-auto calendar-wrapper border border-white/10 min-h-[350px] sm:min-h-[500px] h-full">
                   <Calendar
-                    localizer={localizer}
-                    events={events}
-                    startAccessor="start"
-                    endAccessor="end"
-                    style={{ height: "100%" }}
-                    view={view}
-                    onView={setView}
-                    date={date}
-                    onNavigate={setDate}
-                    onSelectEvent={setSelectedEvent}
-                    popup
-                    selectable
-                    eventPropGetter={(event: Event) => ({
-                      style: {
-                        height: "100%",
-                        backgroundColor: event.status === 'New' ? '#3B82F6' : 
-                                       event.status === 'Confirmed' ? '#13BE77' :
-                                       event.status === 'Rescheduled' ? '#F59E0B' :
-                                       event.status === 'Declined' ? '#EF4444' : '#6B7280',
-                        border: 'none',
-                        borderRadius: '4px',
-                        color: 'white',
-                        fontSize: '12px'
-                      }
-                    })}
+                  localizer={localizer}
+                  events={events}
+                  startAccessor="start"
+                  endAccessor="end"
+                  style={{ height: "100%" }}
+                  view={view}
+                  onView={(vw: any) => {
+                    // react-big-calendar may emit views like "work_week" not present in our narrowed state type.
+                    const v = String(vw);
+                    if (v === "work_week") {
+                    setView("week");
+                    return;
+                    }
+                    if (v === "month" || v === "week" || v === "day" || v === "agenda") {
+                    setView(v as "month" | "week" | "day" | "agenda");
+                    return;
+                    }
+                    setView("month");
+                  }}
+                  date={date}
+                  onNavigate={(newDate: Date) => setDate(newDate)}
+                  onSelectEvent={setSelectedEvent}
+                  popup
+                  selectable
+                  eventPropGetter={(event: Event) => ({
+                    style: {
+                    height: "100%",
+                    backgroundColor:
+                      event.status === "New"
+                      ? "#3B82F6"
+                      : event.status === "Confirmed"
+                      ? "#13BE77"
+                      : event.status === "Rescheduled"
+                      ? "#F59E0B"
+                      : event.status === "Declined"
+                      ? "#EF4444"
+                      : "#6B7280",
+                    border: "none",
+                    borderRadius: "4px",
+                    color: "white",
+                    fontSize: "12px",
+                    },
+                  })}
                   />
                 </div>
 
