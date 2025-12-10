@@ -15,8 +15,8 @@ import {
   LogOut,
   CreditCard,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { ForwardRefExoticComponent, RefAttributes, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { ForwardRefExoticComponent, RefAttributes, useState, useEffect } from "react";
 import { useAuthStore } from "../../../lib/hooks/auth";
 type ItemType = {
   icon: ForwardRefExoticComponent<
@@ -85,7 +85,19 @@ interface SidebarProps {
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const [activeItem, setActiveItem] = useState("Dashboard");
   const router = useRouter();
+  const pathname = usePathname();
   const { logout } = useAuthStore();
+
+  // Sync active item with current route on mount and route change
+  useEffect(() => {
+    const currentPath = pathname.replace(/^\//, ""); // Remove leading slash
+    const matchedItem = navigationItems.find((item) => item.value === currentPath);
+    if (matchedItem) {
+      setActiveItem(matchedItem.label);
+    } else if (currentPath === "" || currentPath === "/") {
+      setActiveItem("Dashboard");
+    }
+  }, [pathname]);
 
   function handleNavigation(item: ItemType) {
     setActiveItem(item.label);
