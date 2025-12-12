@@ -1,81 +1,37 @@
 "use client";
+
 import {
-  Home,
-  FileText,
-  Ticket,
   BarChart3,
-  Settings,
-  LucideProps,
-  Settings2,
-  Calendar,
-  Users,
-  MessageSquare,
-  Bell,
-  Lock,
+  ChevronDown,
+  ChevronRight,
+  FileText,
+  Home,
   LogOut,
-  CreditCard,
+  Menu,
+  MessageSquare,
+  Settings,
+  UserCheck,
+  X
 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { ForwardRefExoticComponent, RefAttributes, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { useAuthStore } from "../../../lib/hooks/auth";
-type ItemType = {
-  icon: ForwardRefExoticComponent<
-    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
-  >;
-  label: string;
-  active: boolean;
-  value: string;
+
+type OpenState = {
+  home: boolean;
+  operational: boolean;
+  consultation: boolean;
+  tickets: boolean;
+  content: boolean;
+  analytics: boolean;
 };
 
-const navigationItems: ItemType[] = [
-  { icon: Home, label: "Dashboard", active: true, value: "" },
-  { icon: Users, label: "Client Management", active: false, value: "client-management" }, // TODO: Add API integration
-  {
-    icon: Ticket,
-    label: "Tickets",
-    active: false,
-    value: "tickets",
-  },
-  { icon: FileText, label: "Content Management", active: false, value: "content-management" }, // TODO: Add API integration
-  {
-    icon: Calendar,
-    label: "Schedule Meetings",
-    active: false,
-    value: "schedule-meetings",
-  },
-  // {
-  //   icon: MessageSquare,
-  //   label: "AI & Chat Oversight",
-  //   active: false,
-  //   value: "ai-oversight",
-  // },
-  {
-    icon: BarChart3,
-    label: "SEO & Analytics",
-    active: false,
-    value: "seo-and-analytics",
-  },
-  // { icon: Lock, label: "Audit & Compliance", active: false, value: "audit-logs" }, // TODO: Add API integration
-  {
-    icon: CreditCard,
-    label: "Payment Management",
-    active: false,
-    value: "payment-management",
-  },
-  {
-    icon: Bell,
-    label: "Notifications",
-    active: false,
-    value: "notifications",
-  },
-  {
-    icon: BarChart3,
-    label: "Analytics & Reporting",
-    active: false,
-    value: "analytics-reporting",
-  },
-  { icon: Settings2, label: "Settings", active: false, value: "settings" },
-];
+type NavItem = {
+  label: string;
+  href: string;
+  subItems?: NavItem[];
+};
 
 interface SidebarProps {
   isOpen: boolean;
@@ -83,80 +39,332 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
-  const [activeItem, setActiveItem] = useState("Dashboard");
-  const router = useRouter();
-  const { logout } = useAuthStore();
+  const pathname = usePathname();
+  const { user, logout } = useAuthStore();
+  const [open, setOpen] = useState<OpenState>({
+    home: true,
+    operational: true,
+    consultation: false,
+    tickets: false,
+    content: false,
+    analytics: false,
+  });
+  const [subOpen, setSubOpen] = useState<{[key: string]: boolean}>({});
 
-  function handleNavigation(item: ItemType) {
-    setActiveItem(item.label);
-    router.push(`/${item.value}`);
-    onClose();
-  }
+  const toggle = (key: keyof OpenState) => setOpen({ ...open, [key]: !open[key] });
+  const toggleSub = (key: string) => setSubOpen({ ...subOpen, [key]: !subOpen[key] });
 
-  function handleLogout() {
+  const handleLogout = () => {
     logout();
-    router.push("/auth/login");
-  }
+    onClose();
+  };
 
   return (
     <>
-      {/* Overlay for mobile */}
+      {/* Mobile Overlay */}
       {isOpen && (
-        <div
-          className="md:hidden fixed inset-0 bg-black/50 z-30"
-          onClick={onClose}
+        <div 
+          className="md:hidden fixed inset-0 bg-black/50 z-40" 
+          onClick={onClose} 
         />
       )}
 
       {/* Sidebar */}
-      <div
-        className={`
-          fixed md:static inset-y-0 left-0 z-40
-          w-64 bg-card min-h-screen p-4 flex flex-col
-          transform transition-transform duration-300 ease-in-out 
-          ${isOpen ? 'translate-x-0 overflow-y-scroll' : '-translate-x-full md:translate-x-0'}
-        `}
-      >
-        <div className="flex items-center justify-center mb-6 mt-12 md:mt-0">
-          <img
-            src="/images/logo.svg"
-            alt="ORR Solutions"
-            className="w-24 h-24"
-          />
+      <aside className={`w-64 h-screen bg-card text-white flex flex-col justify-between p-4 flex-shrink-0 overflow-y-auto transition-transform duration-300 ${
+        isOpen ? 'translate-x-0' : '-translate-x-full'
+      } md:translate-x-0 fixed md:relative z-50 md:z-auto`}>
+        <div>
+          <div className="flex items-center px-2 mb-8">
+            <img src="/images/logo.svg" alt="ORR Solutions" className="w-fit h-auto" />
+          </div>
+
+          <nav className="space-y-1">
+            {/* Home / Dashboard */}
+            <SidebarGroup
+              label="Home / Dashboard"
+              icon={Home}
+              open={open.home}
+              onClick={() => toggle("home")}
+              items={[
+                { label: "Dashboard", href: "/" }
+              ]}
+              pathname={pathname}
+              subOpen={subOpen}
+              toggleSub={toggleSub}
+              onLinkClick={onClose}
+            />
+
+            {/* Operational Dashboard */}
+            <SidebarGroup
+              label="Operational Dashboard"
+              icon={Settings}
+              open={open.operational}
+              onClick={() => toggle("operational")}
+              items={[
+                { label: "Quick Actions", href: "/operational/quick-actions" },
+                { label: "System Notifications", href: "/operational/system-notifications" },
+                { label: "Billing & Credit Overview", href: "/operational/billing-credit" },
+                { 
+                  label: "Client Management", 
+                  href: "/client-management",
+                  subItems: [
+                    { label: "All Clients", href: "/client-management" },
+                    { label: "Client Profiles", href: "/client-management/profiles" },
+                    { label: "Client Workspaces", href: "/client-management/workspaces" },
+                    { 
+                      label: "Client Meetings", 
+                      href: "/client-management/meetings",
+                      subItems: [
+                        { label: "Past", href: "/client-management/meetings/past" },
+                        { label: "Upcoming", href: "/client-management/meetings/upcoming" },
+                        { label: "Pending", href: "/client-management/meetings/pending" }
+                      ]
+                    }
+                  ]
+                }
+              ]}
+              pathname={pathname}
+              subOpen={subOpen}
+              toggleSub={toggleSub}
+              onLinkClick={onClose}
+            />
+
+            {/* Consultation Management */}
+            <SidebarGroup
+              label="Consultation Management"
+              icon={UserCheck}
+              open={open.consultation}
+              onClick={() => toggle("consultation")}
+              items={[
+                { 
+                  label: "All Consultations", 
+                  href: "/consultations",
+                  subItems: [
+                    { label: "Past Consultation Meetings", href: "/consultations/past" },
+                    { label: "Scheduled Consultation Meetings", href: "/consultations/scheduled" }
+                  ]
+                },
+                { label: "Assigned Consultants", href: "/consultations/consultants" },
+                { label: "Reports (drafts/approved)", href: "/consultations/reports" }
+              ]}
+              pathname={pathname}
+              subOpen={subOpen}
+              toggleSub={toggleSub}
+              onLinkClick={onClose}
+            />
+
+            {/* Tickets & Communication */}
+            <SidebarGroup
+              label="Tickets & Communication"
+              icon={MessageSquare}
+              open={open.tickets}
+              onClick={() => toggle("tickets")}
+              items={[
+                { label: "Support Tickets", href: "/tickets" },
+                { label: "Client Messages", href: "/tickets/client-messages" },
+                { label: "Internal Comms", href: "/tickets/internal-comms" },
+                { label: "Escalations", href: "/tickets/escalations" }
+              ]}
+              pathname={pathname}
+              subOpen={subOpen}
+              toggleSub={toggleSub}
+              onLinkClick={onClose}
+            />
+
+            {/* Content Management */}
+            <SidebarGroup
+              label="Content Management"
+              icon={FileText}
+              open={open.content}
+              onClick={() => toggle("content")}
+              items={[
+                { label: "Blog & Articles", href: "/content-management" },
+                { label: "Resources Library", href: "/content-management/resources" },
+                { label: "Templates (Reports, Contracts, DS)", href: "/content-management/templates" },
+                { label: "Content Drafts", href: "/content-management/drafts" }
+              ]}
+              pathname={pathname}
+              subOpen={subOpen}
+              toggleSub={toggleSub}
+              onLinkClick={onClose}
+            />
+
+            {/* Analytics & Insights */}
+            <SidebarGroup
+              label="Analytics & Insights"
+              icon={BarChart3}
+              open={open.analytics}
+              onClick={() => toggle("analytics")}
+              items={[
+                { label: "Behaviour Analytics", href: "/analytics/behaviour" },
+                { label: "Sector Insights", href: "/analytics/sector" },
+                { label: "Consultation Metrics", href: "/analytics/consultation-metrics" },
+                { label: "Workspace Usage", href: "/analytics/workspace-usage" },
+                { label: "Funnel Reports", href: "/analytics/funnel-reports" },
+                { label: "Payments & Billing", href: "/analytics/payments-billing" },
+                { label: "Wallet Logs", href: "/analytics/wallet-logs" },
+                { label: "Pro-rata Approvals", href: "/analytics/pro-rata-approvals" },
+                { label: "Subscriptions", href: "/analytics/subscriptions" },
+                { label: "Invoicing", href: "/analytics/invoicing" },
+                { label: "Payment Disputes", href: "/analytics/payment-disputes" }
+              ]}
+              pathname={pathname}
+              subOpen={subOpen}
+              toggleSub={toggleSub}
+              onLinkClick={onClose}
+            />
+          </nav>
         </div>
 
-        <nav className="space-y-2 text-white flex-1">
-          {navigationItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeItem === item.label;
-
-            return (
-              <button
-                key={item.label}
-                onClick={() => handleNavigation(item)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors cursor-pointer text-sm ${
-                  isActive
-                    ? "bg-primary text-white"
-                    : "text-foreground/70 hover:bg-card-light hover:text-foreground"
-                }`}
-              >
-                <Icon size={20} />
-                <span className="truncate">{item.label}</span>
-              </button>
-            );
-          })}
-        </nav>
-
-        <div className="mt-4 pt-4 border-t border-white/10">
-          <button
+        <div className="bg-primary text-background rounded-xl p-3 mt-10 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center text-foreground font-bold">
+              {user?.username?.[0]?.toUpperCase() || 'A'}
+            </div>
+            <div className="leading-tight text-[12px] font-medium">
+              {user?.username || 'Admin'}
+              <div className="text-[10px] opacity-80 truncate max-w-[120px]">{user?.email || ''}</div>
+            </div>
+          </div>
+          <button 
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors cursor-pointer text-foreground/70 hover:bg-card-light hover:text-red-400"
+            className="p-2 hover:bg-background/20 rounded-lg transition-colors"
+            title="Logout"
           >
-            <LogOut size={20} />
-            <span>Logout</span>
+            <LogOut size={16} />
           </button>
         </div>
-      </div>
+      </aside>
     </>
+  );
+}
+
+function SidebarGroup({ 
+  label, 
+  icon: Icon,
+  open, 
+  onClick, 
+  items, 
+  pathname,
+  subOpen,
+  toggleSub,
+  onLinkClick
+}: { 
+  label: string;
+  icon: any;
+  open: boolean; 
+  onClick: () => void; 
+  items: NavItem[]; 
+  pathname: string;
+  subOpen: {[key: string]: boolean};
+  toggleSub: (key: string) => void;
+  onLinkClick: () => void;
+}) {
+  const isActive = items.some(item => 
+    pathname === item.href || 
+    item.subItems?.some(sub => 
+      pathname === sub.href || 
+      sub.subItems?.some(nested => pathname === nested.href)
+    )
+  );
+  
+  return (
+    <div>
+      <div
+        className={`flex items-center justify-between gap-3 px-3 py-2 rounded-lg cursor-pointer text-sm transition text-white ${
+          isActive ? "bg-lemon text-black" : "hover:bg-primary hover:bg-opacity-20"
+        }`}
+        onClick={onClick}
+      >
+        <div className="flex items-center gap-3">
+          <Icon size={16} />
+          {label}
+        </div>
+        <ChevronDown size={16} className={`${open ? "rotate-180" : ""} transition`} />
+      </div>
+
+      {open && items.length > 0 && (
+        <div className="ml-6 mt-1 space-y-1">
+          {items.map((item) => (
+            <NavItemComponent 
+              key={item.href} 
+              item={item} 
+              pathname={pathname} 
+              subOpen={subOpen} 
+              toggleSub={toggleSub}
+              onLinkClick={onLinkClick}
+              level={0}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function NavItemComponent({ 
+  item, 
+  pathname, 
+  subOpen, 
+  toggleSub, 
+  onLinkClick,
+  level 
+}: { 
+  item: NavItem; 
+  pathname: string; 
+  subOpen: {[key: string]: boolean}; 
+  toggleSub: (key: string) => void;
+  onLinkClick: () => void;
+  level: number;
+}) {
+  const hasSubItems = item.subItems && item.subItems.length > 0;
+  const isActive = pathname === item.href || item.subItems?.some(sub => 
+    pathname === sub.href || sub.subItems?.some(nested => pathname === nested.href)
+  );
+
+  if (hasSubItems) {
+    return (
+      <div>
+        <div 
+          onClick={() => toggleSub(item.href)}
+          className={`flex items-center justify-between px-3 py-1 text-sm rounded cursor-pointer hover:bg-primary hover:bg-opacity-10 ${
+            isActive ? "text-lemon" : "text-white"
+          }`}
+        >
+          <span>{item.label}</span>
+          {subOpen[item.href] ? 
+            <ChevronDown size={14} className="transition" /> : 
+            <ChevronRight size={14} className="transition" />
+          }
+        </div>
+        {subOpen[item.href] && (
+          <div className="ml-4 mt-1 space-y-1">
+            {item.subItems!.map((subItem) => (
+              <NavItemComponent 
+                key={subItem.href} 
+                item={subItem} 
+                pathname={pathname} 
+                subOpen={subOpen} 
+                toggleSub={toggleSub}
+                onLinkClick={onLinkClick}
+                level={level + 1}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <Link 
+      href={item.href}
+      onClick={onLinkClick}
+      className={`block px-3 py-1 text-${level > 0 ? 'xs' : 'sm'} rounded cursor-pointer hover:bg-primary hover:bg-opacity-10 ${
+        pathname === item.href ? "text-lemon" : "text-white opacity-70"
+      }`}
+    >
+      {item.label}
+    </Link>
   );
 }

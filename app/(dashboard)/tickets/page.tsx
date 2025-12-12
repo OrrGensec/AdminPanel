@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Search, Filter, Plus, ChevronDown, MessageSquare, Clock, AlertCircle, Loader } from "lucide-react";
 import { ticketAPI } from "@/app/services";
-import type { TicketListItem, Ticket, TicketStatus, TicketPriority } from "@/app/services/types";
+import type { TicketListItem, TicketPriority, TicketSource, TicketStatus } from "@/app/services/types";
+import { MessageSquare, Search } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const statusColors: Record<TicketStatus, string> = {
   new: "bg-blue-500/30 text-blue-300 border-blue-500/30",
@@ -20,12 +20,25 @@ const priorityColors: Record<TicketPriority, string> = {
   urgent: "text-red-400",
 };
 
+const sourceColors: Record<TicketSource, string> = {
+  ai_escalation: "bg-purple-500/20 text-purple-300 border-purple-500/30",
+  manual_request: "bg-blue-500/20 text-blue-300 border-blue-500/30",
+};
+
+const sourceIcons: Record<TicketSource, React.ReactNode> = {
+  ai_escalation: "🤖",
+  manual_request: "👤",
+};
+
 export default function TicketsPage() {
   const [tickets, setTickets] = useState<TicketListItem[]>([]);
   const [selectedTicket, setSelectedTicket] = useState<TicketListItem | null>(null);
+  const [ticketMessages, setTicketMessages] = useState<any[]>([]);
   const [filterStatus, setFilterStatus] = useState<TicketStatus | "all">("all");
   const [filterPriority, setFilterPriority] = useState<TicketPriority | "all">("all");
+  const [filterSource, setFilterSource] = useState<TicketSource | "all">("all");
   const [loading, setLoading] = useState(false);
+  const [messagesLoading, setMessagesLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -35,6 +48,7 @@ export default function TicketsPage() {
         const response = await ticketAPI.listTickets({
           status: filterStatus !== "all" ? filterStatus : undefined,
           priority: filterPriority !== "all" ? filterPriority : undefined,
+          source: filterSource !== "all" ? filterSource : undefined,
         }) as any;
         // Handle both array response and object with results
         setTickets(Array.isArray(response) ? response : (response.results || []));
@@ -47,12 +61,32 @@ export default function TicketsPage() {
     };
 
     fetchTickets();
-  }, [filterStatus, filterPriority]);
+  }, [filterStatus, filterPriority, filterSource]);
+
+  const fetchTicketMessages = async (ticketId: number) => {
+    try {
+      setMessagesLoading(true);
+      const messagesData = await ticketAPI.listMessages(ticketId).catch(() => []);
+      const messages = Array.isArray(messagesData) ? messagesData : ((messagesData as any)?.results || []);
+      setTicketMessages(messages);
+    } catch (err) {
+      console.error("Failed to fetch ticket messages:", err);
+      setTicketMessages([]);
+    } finally {
+      setMessagesLoading(false);
+    }
+  };
+
+  const handleSelectTicket = (ticket: TicketListItem) => {
+    setSelectedTicket(ticket);
+    fetchTicketMessages(ticket.id);
+  };
 
   const filteredTickets = tickets.filter((ticket) => {
     const statusMatch = filterStatus === "all" || ticket.status === filterStatus;
     const priorityMatch = filterPriority === "all" || ticket.priority === filterPriority;
-    return statusMatch && priorityMatch;
+    const sourceMatch = filterSource === "all" || ticket.source === filterSource;
+    return statusMatch && priorityMatch && sourceMatch;
   });
 
   return (
@@ -82,8 +116,8 @@ export default function TicketsPage() {
                     />
                   </div>
 
-                  <div className="flex gap-2">
-                    <div className="flex-1">
+                  <div className="flex gap-2 flex-wrap">
+                    <div className="flex-1 min-w-[120px]">
                       <select
                         value={filterStatus}
                         onChange={(e) => setFilterStatus(e.target.value as TicketStatus | "all")}
@@ -97,7 +131,7 @@ export default function TicketsPage() {
                         <option value="archived" className="bg-gray-800">Archived</option>
                       </select>
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-[120px]">
                       <select
                         value={filterPriority}
                         onChange={(e) => setFilterPriority(e.target.value as TicketPriority | "all")}
@@ -108,6 +142,17 @@ export default function TicketsPage() {
                         <option value="normal" className="bg-gray-800">Normal</option>
                         <option value="high" className="bg-gray-800">High</option>
                         <option value="urgent" className="bg-gray-800">Urgent</option>
+                      </select>
+                    </div>
+                    <div className="flex-1 min-w-[120px]">
+                      <select
+                        value={filterSource}
+                        onChange={(e) => setFilterSource(e.target.value as TicketSource | "all")}
+                        className="w-full bg-white/10 border border-white/20 px-3 py-2 rounded-lg text-white text-sm focus:outline-none focus:border-primary/50 transition-all duration-200"
+                      >
+                        <option value="all" className="bg-gray-800">All Source</option>
+                        <option value="ai_escalation" className="bg-gray-800">AI Escalation</option>
+                        <option value="manual_request" className="bg-gray-800">Manual Request</option>
                       </select>
                     </div>
                   </div>
@@ -126,7 +171,12 @@ export default function TicketsPage() {
                       >
                         <div className="flex items-start justify-between gap-2 mb-2">
                           <div className="flex-1">
-                            <p className="font-semibold text-white text-sm">{ticket.ticket_id}</p>
+                            <div className="flex items-center gap-2">
+                              <p className="font-semibold text-white text-sm">{ticket.ticket_id}</p>
+                              <span className={`text-xs px-2 py-0.5 rounded border ${sourceColors[ticket.source]}`}>
+                                {sourceIcons[ticket.source]} {ticket.source.replace('_', ' ')}
+                              </span>
+                            </div>
                             <p className="text-xs text-gray-400 mt-1">{ticket.client_name}</p>
                           </div>
                           <span className={`text-xs px-2 py-1 rounded border ${statusColors[ticket.status]}`}>
