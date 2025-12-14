@@ -174,38 +174,8 @@ export default function ApiExampleComponent() {
   };
 
   const testCreateOperations = async () => {
-    try {
-      // Test creating a client
-      const clientResult = await createClient.mutate({
-        full_name: "Test Client",
-        email: "test@example.com",
-        company: "Test Company",
-        stage: "discover",
-        primary_pillar: "strategic"
-      });
-      console.log('✅ Client created:', clientResult);
-
-      // Test creating content
-      const contentResult = await createContent.mutate({
-        title: "Test Content",
-        content: "This is test content",
-        content_type: "article",
-        status: "draft",
-        stage: "discover"
-      });
-      console.log('✅ Content created:', contentResult);
-
-      // Test creating a notification
-      const notificationResult = await createNotification.mutate({
-        notification_type: "system_alert",
-        title: "Test Notification",
-        message: "This is a test notification"
-      });
-      console.log('✅ Notification created:', notificationResult);
-
-    } catch (error) {
-      console.error('❌ Create operations failed:', error);
-    }
+    console.log('⚠️ Create operations disabled - no dummy data will be created');
+    console.log('To test create operations, use the actual forms in the application');
   };
 
   return (
@@ -277,7 +247,7 @@ export default function ApiExampleComponent() {
               <ApiStatus {...userData} />
               <div className="text-sm text-gray-300">
                 <p>Endpoint: <code className="text-primary">/admin-portal/v1/auth/me/</code></p>
-                <p>User: {userData.data?.full_name || userData.data?.username || 'Not loaded'}</p>
+                <p>User: {(userData.data as any)?.full_name || (userData.data as any)?.username || 'Not loaded'}</p>
               </div>
             </ApiSection>
 
@@ -287,7 +257,7 @@ export default function ApiExampleComponent() {
               <div className="text-sm text-gray-300">
                 <p>Endpoint: <code className="text-primary">/admin-portal/v1/clients/</code></p>
                 <p>Clients: {Array.isArray(clientsData.data) ? clientsData.data.length : 
-                          clientsData.data?.results?.length || 0} loaded</p>
+                          (clientsData.data as any)?.results?.length || 0} loaded</p>
               </div>
             </ApiSection>
 
@@ -297,7 +267,7 @@ export default function ApiExampleComponent() {
               <div className="text-sm text-gray-300">
                 <p>Endpoint: <code className="text-primary">/admin-portal/v1/content/</code></p>
                 <p>Content: {Array.isArray(contentData.data) ? contentData.data.length : 
-                           contentData.data?.results?.length || 0} items</p>
+                           (contentData.data as any)?.results?.length || 0} items</p>
               </div>
             </ApiSection>
 
@@ -307,7 +277,7 @@ export default function ApiExampleComponent() {
               <div className="text-sm text-gray-300">
                 <p>Endpoint: <code className="text-primary">/admin-portal/v1/meetings/</code></p>
                 <p>Meetings: {Array.isArray(meetingsData.data) ? meetingsData.data.length : 
-                            meetingsData.data?.results?.length || 0} scheduled</p>
+                            (meetingsData.data as any)?.results?.length || 0} scheduled</p>
               </div>
             </ApiSection>
 
@@ -317,7 +287,7 @@ export default function ApiExampleComponent() {
               <div className="text-sm text-gray-300">
                 <p>Endpoint: <code className="text-primary">/admin-portal/v1/tickets/</code></p>
                 <p>Tickets: {Array.isArray(ticketsData.data) ? ticketsData.data.length : 
-                           ticketsData.data?.results?.length || 0} open</p>
+                           (ticketsData.data as any)?.results?.length || 0} open</p>
               </div>
             </ApiSection>
 
@@ -327,7 +297,7 @@ export default function ApiExampleComponent() {
               <div className="text-sm text-gray-300">
                 <p>Endpoint: <code className="text-primary">/admin-portal/v1/notifications/</code></p>
                 <p>Notifications: {Array.isArray(notificationsData.data) ? notificationsData.data.length : 
-                                 notificationsData.data?.results?.length || 0} pending</p>
+                                 (notificationsData.data as any)?.results?.length || 0} pending</p>
               </div>
             </ApiSection>
 
@@ -336,7 +306,7 @@ export default function ApiExampleComponent() {
               <ApiStatus {...billingData} />
               <div className="text-sm text-gray-300">
                 <p>Endpoint: <code className="text-primary">/admin-portal/v1/billing-history/stats/</code></p>
-                <p>Revenue: {billingData.data?.total_revenue || 'Not loaded'}</p>
+                <p>Revenue: {(billingData.data as any)?.total_revenue || 'Not loaded'}</p>
               </div>
             </ApiSection>
 
@@ -363,11 +333,11 @@ export default function ApiExampleComponent() {
                   error={createClient.error} 
                   data={createClient.data} 
                 />
-                {createClient.data && (
+                {createClient.data ? (
                   <p className="text-xs text-gray-400">
-                    Created: {createClient.data.full_name}
+                    Created: {(createClient.data as any).full_name}
                   </p>
-                )}
+                ) : null}
               </div>
 
               <div className="p-4 bg-white/5 rounded-lg">
@@ -377,11 +347,11 @@ export default function ApiExampleComponent() {
                   error={createContent.error} 
                   data={createContent.data} 
                 />
-                {createContent.data && (
+                {createContent.data ? (
                   <p className="text-xs text-gray-400">
-                    Created: {createContent.data.title}
+                    Created: {(createContent.data as any).title}
                   </p>
-                )}
+                ) : null}
               </div>
 
               <div className="p-4 bg-white/5 rounded-lg">
@@ -391,11 +361,11 @@ export default function ApiExampleComponent() {
                   error={createNotification.error} 
                   data={createNotification.data} 
                 />
-                {createNotification.data && (
+                {createNotification.data ? (
                   <p className="text-xs text-gray-400">
-                    Created: {createNotification.data.title}
+                    Created: {(createNotification.data as any).title}
                   </p>
-                )}
+                ) : null}
               </div>
 
             </div>
@@ -417,9 +387,9 @@ function MyComponent() {
   const handleCreate = async () => {
     try {
       await createClient.mutate({
-        full_name: "John Doe",
-        email: "john@example.com",
-        company: "Acme Corp"
+        full_name: "Client Name",
+        email: "client@company.com",
+        company: "Company Name"
       });
       refetch(); // Refresh the list
     } catch (error) {

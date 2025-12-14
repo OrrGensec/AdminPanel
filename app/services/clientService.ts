@@ -55,7 +55,7 @@ export class ClientService {
       if (Array.isArray(response)) {
         clients = response;
       } else if (response && typeof response === 'object') {
-        clients = response.results || response.data || [];
+        clients = (response as any).results || (response as any).data || [];
       }
 
       console.log('ClientService: Processed clients:', clients);
@@ -190,7 +190,7 @@ export class ClientService {
       const documents = await clientAPI.listDocuments(clientId);
       console.log('ClientService: Documents response:', documents);
       
-      return Array.isArray(documents) ? documents : (documents.results || []);
+      return Array.isArray(documents) ? documents : ((documents as any).results || []);
     } catch (error: any) {
       console.error('ClientService: Error fetching client documents:', error);
       throw new Error(error.message || 'Failed to fetch client documents');
