@@ -86,13 +86,13 @@ export default function SendMessageModal({ isOpen, onClose }: SendMessageModalPr
       console.log('✅ Ticket created successfully:', ticket);
       
       // If there's a message to send, add it to the ticket
-      if (!formData.is_internal && formData.description && ticket?.id) {
-        await ticketAPI.addMessage(ticket.id, formData.description, false);
+      if (!formData.is_internal && formData.description && (ticket as any)?.id) {
+        await ticketAPI.addMessage((ticket as any).id, formData.description, false);
       }
       
       // Add internal notes if provided
-      if (formData.internal_notes && ticket?.id) {
-        await ticketAPI.addMessage(ticket.id, formData.internal_notes, true);
+      if (formData.internal_notes && (ticket as any)?.id) {
+        await ticketAPI.addMessage((ticket as any).id, formData.internal_notes, true);
       }
       
       setSuccess(true);

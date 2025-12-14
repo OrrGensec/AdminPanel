@@ -234,7 +234,7 @@ export default function ClientDetailsModal({ client, isOpen, onClose, onUpdate }
                   <label className="text-xs text-gray-400 mb-1 block">Stage</label>
                   {isEditing ? (
                     <select
-                      value={editData.stage || client.stage}
+                      value={editData.stage || client.stage || "discover"}
                       onChange={(e) => setEditData({ ...editData, stage: e.target.value as any })}
                       className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary/50"
                     >
@@ -253,7 +253,7 @@ export default function ClientDetailsModal({ client, isOpen, onClose, onUpdate }
                   <label className="text-xs text-gray-400 mb-1 block">Primary Pillar</label>
                   {isEditing ? (
                     <select
-                      value={editData.primary_pillar || client.primary_pillar}
+                      value={editData.primary_pillar || client.primary_pillar || "strategic"}
                       onChange={(e) => setEditData({ ...editData, primary_pillar: e.target.value as any })}
                       className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-primary/50"
                     >

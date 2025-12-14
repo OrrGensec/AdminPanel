@@ -35,7 +35,7 @@ export async function validateClientData(clientData: {
     
     const clientsArray = Array.isArray(existingClients) 
       ? existingClients 
-      : existingClients?.results || existingClients?.data || [];
+      : (existingClients as any)?.results || (existingClients as any)?.data || [];
 
     // Check for email duplicates
     const emailExists = clientsArray.some((client: any) => 

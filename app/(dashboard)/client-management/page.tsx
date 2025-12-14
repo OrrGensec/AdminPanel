@@ -299,10 +299,10 @@ export default function page() {
                                 </div>
 
                                 <div className="flex items-center gap-2 flex-wrap">
-                                  <span className={`text-xs px-2 py-0.5 rounded border ${stageColors[client.stage] || "bg-gray-500/30 text-gray-300 border-gray-500/30"}`}>
+                                  <span className={`text-xs px-2 py-0.5 rounded border ${client.stage ? stageColors[client.stage] || "bg-gray-500/30 text-gray-300 border-gray-500/30" : "bg-gray-500/30 text-gray-300 border-gray-500/30"}`}>
                                     {client.stage ? client.stage.charAt(0).toUpperCase() + client.stage.slice(1) : 'Unknown'}
                                   </span>
-                                  <span className={`text-xs ${pillarColors[client.primary_pillar] || "text-gray-400"}`}>
+                                  <span className={`text-xs ${client.primary_pillar ? pillarColors[client.primary_pillar] || "text-gray-400" : "text-gray-400"}`}>
                                     {client.primary_pillar === "strategic" ? "Strategic" : 
                                      client.primary_pillar === "operational" ? "Operational" : 
                                      client.primary_pillar === "financial" ? "Financial" : "Cultural"}
@@ -310,7 +310,7 @@ export default function page() {
                                 </div>
 
                                 <div className="mt-2 text-xs text-gray-500">
-                                  Last active: {formatDate(client.last_activity)}
+                                  Last active: {formatDate(client.last_activity || "")}
                                 </div>
                               </div>
                             ))
@@ -369,7 +369,7 @@ export default function page() {
                     </div>
 
                     <div className="flex items-center gap-3 flex-wrap">
-                      <span className={`text-sm px-3 py-1 rounded border ${stageColors[selectedClient.stage] || "bg-gray-500/30 text-gray-300 border-gray-500/30"}`}>
+                      <span className={`text-sm px-3 py-1 rounded border ${selectedClient.stage ? stageColors[selectedClient.stage] || "bg-gray-500/30 text-gray-300 border-gray-500/30" : "bg-gray-500/30 text-gray-300 border-gray-500/30"}`}>
                         Stage: {selectedClient.stage ? selectedClient.stage.charAt(0).toUpperCase() + selectedClient.stage.slice(1) : 'Unknown'}
                       </span>
                       <span className={`text-sm px-3 py-1 rounded border ${selectedClient.is_portal_active ? "bg-green-500/30 text-green-300 border-green-500/30" : "bg-red-500/30 text-red-300 border-red-500/30"}`}>
@@ -404,7 +404,7 @@ export default function page() {
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <label className="text-xs text-gray-400">Primary Pillar</label>
-                        <p className={`text-sm font-medium ${pillarColors[selectedClient.primary_pillar] || "text-white"}`}>
+                        <p className={`text-sm font-medium ${selectedClient.primary_pillar ? pillarColors[selectedClient.primary_pillar] || "text-white" : "text-white"}`}>
                           {selectedClient.primary_pillar === "strategic" ? "Strategic Vision, Planning & Growth" : 
                            selectedClient.primary_pillar === "operational" ? "Operational Excellence & Processes" : 
                            selectedClient.primary_pillar === "financial" ? "Financial Management & Planning" : 
@@ -421,17 +421,17 @@ export default function page() {
 
                       <div>
                         <label className="text-xs text-gray-400">Date Joined</label>
-                        <p className="text-sm font-medium text-white">{formatDate(selectedClient.date_joined)}</p>
+                        <p className="text-sm font-medium text-white">{formatDate(selectedClient.date_joined || "")}</p>
                       </div>
 
                       <div>
                         <label className="text-xs text-gray-400">Last Login</label>
-                        <p className="text-sm font-medium text-white">{formatDateTime(selectedClient.last_login)}</p>
+                        <p className="text-sm font-medium text-white">{formatDateTime(selectedClient.last_login || "")}</p>
                       </div>
 
                       <div>
                         <label className="text-xs text-gray-400">Last Activity</label>
-                        <p className="text-sm font-medium text-white">{formatDateTime(selectedClient.last_activity)}</p>
+                        <p className="text-sm font-medium text-white">{formatDateTime(selectedClient.last_activity || "")}</p>
                       </div>
 
                       <div>

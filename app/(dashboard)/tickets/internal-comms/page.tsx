@@ -19,7 +19,7 @@ export default function InternalCommsPage() {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('http://127.0.0.1:8000/admin-portal/v1/tickets/my-tickets/', {
+      const response = await fetch('https://orr-backend-web-latest.onrender.com/admin-portal/v1/tickets/my-tickets/', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth-token')}`
         }
@@ -96,9 +96,7 @@ export default function InternalCommsPage() {
                     <div>
                       <label className="text-xs text-gray-400 mb-1 block">Status</label>
                       <p className={`text-sm font-medium ${
-                        ticket.status === 'new' ? 'text-blue-400' :
-                        ticket.status === 'in_progress' ? 'text-yellow-400' :
-                        ticket.status === 'waiting' ? 'text-orange-400' :
+                        ticket.status === 'processing' ? 'text-yellow-400' :
                         ticket.status === 'resolved' ? 'text-green-400' :
                         'text-gray-400'
                       }`}>
@@ -112,7 +110,7 @@ export default function InternalCommsPage() {
                     <div>
                       <label className="text-xs text-gray-400 mb-1 block">Source</label>
                       <p className="text-sm text-white">
-                        {ticket.source === 'ai_escalation' ? '🤖 AI Escalation' : '👤 Manual Request'}
+                        {ticket.source === 'client_inquiry' ? '🤖 Client Inquiry' : '👤 Manual Request'}
                       </p>
                     </div>
                   </div>

@@ -20,7 +20,8 @@ export default function RequestedMeetingsPage() {
     try {
       const userData = await authAPI.getCurrentUser();
       setCurrentUser(userData);
-      await fetchRequestedMeetings(userData?.id);
+      const userId = (userData as any)?.id;
+      await fetchRequestedMeetings(userId);
     } catch (err: any) {
       console.error("Failed to fetch current user:", err);
       setError("Failed to load user information");
@@ -44,11 +45,11 @@ export default function RequestedMeetingsPage() {
     }
   };
 
-  const handleMeetingAction = async (meetingId: number, action: string, data?: any) => {
+  const handleMeetingAction = async (meetingId: number, action: "confirm" | "reschedule" | "decline" | "complete" | "cancel", data?: any) => {
     try {
       setActionLoading(meetingId);
       await meetingAPI.performAction(meetingId, action, data);
-      await fetchRequestedMeetings(currentUser?.id);
+      await fetchRequestedMeetings((currentUser as any)?.id);
     } catch (err: any) {
       console.error(`Failed to ${action} meeting:`, err);
       setError(err.message || `Failed to ${action} meeting`);

@@ -19,7 +19,7 @@ export default function ClientMessagesPage() {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('http://127.0.0.1:8002/admin-portal/v1/tickets/?source=manual_request', {
+      const response = await fetch('https://orr-backend-web-latest.onrender.com/admin-portal/v1/tickets/?source=manual_request', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth-token')}`
         }
@@ -95,8 +95,7 @@ export default function ClientMessagesPage() {
                     </div>
                     <div className="flex items-center gap-3">
                       <span className={`text-xs px-2 py-1 rounded ${
-                        ticket.status === 'new' ? 'bg-blue-500/20 text-blue-300' :
-                        ticket.status === 'in_progress' ? 'bg-yellow-500/20 text-yellow-300' :
+                        ticket.status === 'processing' ? 'bg-yellow-500/20 text-yellow-300' :
                         ticket.status === 'resolved' ? 'bg-green-500/20 text-green-300' :
                         'bg-gray-500/20 text-gray-300'
                       }`}>
