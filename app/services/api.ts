@@ -4,7 +4,7 @@
  * Base URL: /admin-portal/v1/
  */
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://orr-backend-web-latest.onrender.com";
+const BASE_URL =  "https://orr-backend-web-latest.onrender.com";
 
 // ============================================================================
 // UTILITY FUNCTIONS
