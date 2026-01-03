@@ -44,7 +44,7 @@ export default function OperationalSystemsAdminPage() {
     try {
       setLoading(true);
       const response = await cmsAPI.getOperationalSystemsContent();
-      setContent(response.data);
+      setContent(response as any);
     } catch (err: any) {
       setError(err.message || "Failed to fetch Operational Systems content");
     } finally {
@@ -352,76 +352,6 @@ export default function OperationalSystemsAdminPage() {
                     onChange={(e) => handleInputChange("meta_description", e.target.value)}
                     rows={3}
                     className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary/50 resize-none"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-                      onChange={(e) => handleInputChange("service_2_title", e.target.value)}
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary/50"
-                    />
-                    <label className="text-sm text-gray-400 mb-2 block mt-3">Service 2 Description</label>
-                    <textarea
-                      value={content.service_2_description}
-                      onChange={(e) => handleInputChange("service_2_description", e.target.value)}
-                      rows={3}
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary/50 resize-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm text-gray-400 mb-2 block">Service 3 Title</label>
-                    <input
-                      type="text"
-                      value={content.service_3_title}
-                      onChange={(e) => handleInputChange("service_3_title", e.target.value)}
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary/50"
-                    />
-                    <label className="text-sm text-gray-400 mb-2 block mt-3">Service 3 Description</label>
-                    <textarea
-                      value={content.service_3_description}
-                      onChange={(e) => handleInputChange("service_3_description", e.target.value)}
-                      rows={3}
-                      className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary/50 resize-none"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* CTA Section */}
-            <div className="bg-white/5 rounded-xl p-6 border border-white/10">
-              <h2 className="text-xl font-semibold text-white mb-4">Call to Action Section</h2>
-              <div className="grid gap-4">
-                <div>
-                  <label className="text-sm text-gray-400 mb-2 block">CTA Title</label>
-                  <input
-                    type="text"
-                    value={content.cta_title}
-                    onChange={(e) => handleInputChange("cta_title", e.target.value)}
-                    className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary/50"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm text-gray-400 mb-2 block">CTA Description</label>
-                  <textarea
-                    value={content.cta_description}
-                    onChange={(e) => handleInputChange("cta_description", e.target.value)}
-                    rows={3}
-                    className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary/50 resize-none"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm text-gray-400 mb-2 block">CTA Button Text</label>
-                  <input
-                    type="text"
-                    value={content.cta_button_text}
-                    onChange={(e) => handleInputChange("cta_button_text", e.target.value)}
-                    className="w-full bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary/50"
                   />
                 </div>
               </div>

@@ -5,7 +5,7 @@ interface EditableTextProps {
   content: string;
   onSave: (newContent: string) => Promise<void>;
   className?: string;
-  tag?: 'h1' | 'h2' | 'h3' | 'p' | 'span';
+  tag?: 'h1' | 'h2' | 'h3' | 'p' | 'span' | 'label' | 'div';
   placeholder?: string;
   multiline?: boolean;
 }

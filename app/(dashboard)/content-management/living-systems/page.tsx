@@ -44,7 +44,7 @@ export default function LivingSystemsAdminPage() {
     try {
       setLoading(true);
       const response = await cmsAPI.getLivingSystemsContent();
-      setContent(response.data);
+      setContent(response as any);
     } catch (err: any) {
       setError(err.message || "Failed to fetch Living Systems content");
     } finally {

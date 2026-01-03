@@ -236,7 +236,7 @@ export default function StickyScrollSplit() {
                     <div className="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center">
                       <EditableText
                         content="+"
-                        onSave={(newText) => console.log('Saved plus sign:', newText)}
+                        onSave={async (newText) => { console.log('Saved plus sign:', newText); }}
                         tag="span"
                         className="text-white font-bold text-2xl"
                         placeholder="+"
