@@ -1361,6 +1361,64 @@ export const cmsAPI = {
       throw error;
     });
   },
+
+  // Service Pillar Pages
+  getStrategicAdvisoryContent: () => {
+    console.log('[API] Fetching Strategic Advisory content');
+    return apiCall("/admin-portal/v1/cms/strategic-advisory/").catch(error => {
+      console.error('[API ERROR] Failed to fetch Strategic Advisory content:', error);
+      throw error;
+    });
+  },
+
+  updateStrategicAdvisoryContent: (data: Record<string, any>) => {
+    console.log('[API] Updating Strategic Advisory content:', data);
+    return apiCall("/admin-portal/v1/cms/strategic-advisory/", {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }).catch(error => {
+      console.error('[API ERROR] Failed to update Strategic Advisory content:', error);
+      throw error;
+    });
+  },
+
+  getOperationalSystemsContent: () => {
+    console.log('[API] Fetching Operational Systems content');
+    return apiCall("/admin-portal/v1/cms/operational-systems/").catch(error => {
+      console.error('[API ERROR] Failed to fetch Operational Systems content:', error);
+      throw error;
+    });
+  },
+
+  updateOperationalSystemsContent: (data: Record<string, any>) => {
+    console.log('[API] Updating Operational Systems content:', data);
+    return apiCall("/admin-portal/v1/cms/operational-systems/", {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }).catch(error => {
+      console.error('[API ERROR] Failed to update Operational Systems content:', error);
+      throw error;
+    });
+  },
+
+  getLivingSystemsContent: () => {
+    console.log('[API] Fetching Living Systems content');
+    return apiCall("/admin-portal/v1/cms/living-systems/").catch(error => {
+      console.error('[API ERROR] Failed to fetch Living Systems content:', error);
+      throw error;
+    });
+  },
+
+  updateLivingSystemsContent: (data: Record<string, any>) => {
+    console.log('[API] Updating Living Systems content:', data);
+    return apiCall("/admin-portal/v1/cms/living-systems/", {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }).catch(error => {
+      console.error('[API ERROR] Failed to update Living Systems content:', error);
+      throw error;
+    });
+  },
 };
 
 // ============================================================================

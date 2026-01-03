@@ -1,5 +1,6 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, forwardRef } from 'react';
+import { AuthService } from '../lib/auth';
 
 interface EditableTextProps {
   content: string;
@@ -10,43 +11,44 @@ interface EditableTextProps {
   multiline?: boolean;
 }
 
-export default function EditableText({
+const EditableText = forwardRef<HTMLElement, EditableTextProps>(function EditableText({
   content,
   onSave,
   className = '',
   tag = 'p',
   placeholder = 'Click to edit...',
   multiline = false
-}: EditableTextProps) {
+}, ref) {
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(content || '');
   const [isSaving, setIsSaving] = useState(false);
+  const [canEdit, setCanEdit] = useState(true); // Always allow editing in admin
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
-  const isAuthenticated = true; // Always allow editing for now
 
   useEffect(() => {
     setValue(content || '');
   }, [content]);
 
   useEffect(() => {
-    if (isEditing && inputRef.current && value) {
+    if (isEditing && inputRef.current) {
       inputRef.current.focus();
+      const length = value.length;
       if (multiline) {
-        (inputRef.current as HTMLTextAreaElement).setSelectionRange(value.length, value.length);
+        (inputRef.current as HTMLTextAreaElement).setSelectionRange(length, length);
       } else {
-        (inputRef.current as HTMLInputElement).setSelectionRange(value.length, value.length);
+        (inputRef.current as HTMLInputElement).setSelectionRange(length, length);
       }
     }
-  }, [isEditing, multiline, value?.length]);
+  }, [isEditing, multiline]);
 
   const handleClick = () => {
-    if (isAuthenticated && !isEditing) {
+    if (canEdit && !isEditing && !isSaving) {
       setIsEditing(true);
     }
   };
 
   const handleSave = async () => {
-    if (value !== (content || '')) {
+    if (value !== (content || '') && !isSaving) {
       setIsSaving(true);
       try {
         await onSave(value);
@@ -72,18 +74,20 @@ export default function EditableText({
     } else if (e.key === 'Escape') {
       handleCancel();
     } else if (e.key === 'Enter' && e.ctrlKey && multiline) {
+      e.preventDefault();
       handleSave();
     }
   };
 
   const editableProps = {
-    className: `${className} ${isAuthenticated ? 'cursor-pointer hover:bg-blue-500/10 hover:outline hover:outline-1 hover:outline-blue-500 transition-all' : ''} ${isEditing ? 'bg-blue-500/20 outline outline-2 outline-blue-500' : ''}`,
+    className: `${className} ${canEdit ? 'cursor-pointer hover:bg-blue-500/10 hover:outline hover:outline-1 hover:outline-blue-500 transition-all' : ''} ${isEditing ? 'bg-blue-500/20 outline outline-2 outline-blue-500' : ''}`,
     onClick: handleClick,
-    title: isAuthenticated ? 'Click to edit' : undefined,
+    title: canEdit ? 'Click to edit' : undefined,
   };
 
   if (isEditing) {
-    const baseInputProps = {
+    const inputProps = {
+      ref: inputRef,
       value,
       onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setValue(e.target.value),
       onBlur: handleSave,
@@ -97,12 +101,11 @@ export default function EditableText({
       return (
         <div className="relative">
           <textarea
-            {...(baseInputProps as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
-            ref={inputRef as React.RefObject<HTMLTextAreaElement>}
+            {...inputProps}
             rows={Math.max(3, (value || '').split('\n').length)}
           />
           {isSaving && (
-            <div className="absolute top-2 right-2 text-blue-500">
+            <div className="absolute top-2 right-2 text-blue-500 text-sm bg-white px-2 py-1 rounded">
               Saving...
             </div>
           )}
@@ -113,11 +116,10 @@ export default function EditableText({
         <div className="relative">
           <input
             type="text"
-            {...(baseInputProps as React.InputHTMLAttributes<HTMLInputElement>)}
-            ref={inputRef as React.RefObject<HTMLInputElement>}
+            {...inputProps}
           />
           {isSaving && (
-            <div className="absolute top-2 right-2 text-blue-500 text-sm">
+            <div className="absolute top-2 right-2 text-blue-500 text-sm bg-white px-2 py-1 rounded">
               Saving...
             </div>
           )}
@@ -128,13 +130,20 @@ export default function EditableText({
 
   const Tag = tag;
   return (
-    <Tag {...editableProps}>
+    <Tag {...editableProps} ref={ref}>
       {content || placeholder}
-      {isAuthenticated && (
+      {canEdit && !isSaving && (
         <span className="ml-2 text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity text-sm">
           ✏️
         </span>
       )}
+      {isSaving && (
+        <span className="ml-2 text-green-400 text-sm">
+          💾
+        </span>
+      )}
     </Tag>
   );
-}
+});
+
+export default EditableText;
