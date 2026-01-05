@@ -11,6 +11,151 @@ export class CMSService {
     };
   }
 
+  // How We Operate Page
+  async getHowWeOperatePage(): Promise<any> {
+    const response = await fetch(
+      `${API_BASE_URL}/admin-portal/v1/cms/how-we-operate/`
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch How We Operate page');
+    }
+
+    const result = await response.json();
+    return result.data || result;
+  }
+
+  async updateHowWeOperatePage(data: Partial<any>): Promise<void> {
+    const response = await fetch(
+      `${API_BASE_URL}/admin-portal/v1/cms/how-we-operate/`,
+      {
+        method: 'PUT',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to update How We Operate page');
+    }
+  }
+
+  // Services Page
+  async getServicesPageContent(): Promise<any> {
+    const response = await fetch(
+      `${API_BASE_URL}/admin-portal/v1/cms/services-content/`
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch Services page content');
+    }
+
+    const result = await response.json();
+    return result.data || result;
+  }
+
+  async updateServicesPageContent(data: Partial<any>): Promise<void> {
+    const response = await fetch(
+      `${API_BASE_URL}/admin-portal/v1/cms/services-content/`,
+      {
+        method: 'PUT',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to update Services page content');
+    }
+  }
+
+  // Resources & Blogs Page
+  async getResourcesBlogsPageContent(): Promise<any> {
+    const response = await fetch(
+      `${API_BASE_URL}/admin-portal/v1/cms/resources-content/`
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch Resources & Blogs page content');
+    }
+
+    const result = await response.json();
+    return result.data || result;
+  }
+
+  async updateResourcesBlogsPageContent(data: Partial<any>): Promise<void> {
+    const response = await fetch(
+      `${API_BASE_URL}/admin-portal/v1/cms/resources-content/`,
+      {
+        method: 'PUT',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to update Resources & Blogs page content');
+    }
+  }
+
+  // Legal & Policy Page
+  async getLegalPolicyPageContent(): Promise<any> {
+    const response = await fetch(
+      `${API_BASE_URL}/admin-portal/v1/cms/legal-policy-content/`
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch Legal & Policy page content');
+    }
+
+    const result = await response.json();
+    return result.data || result;
+  }
+
+  async updateLegalPolicyPageContent(data: Partial<any>): Promise<void> {
+    const response = await fetch(
+      `${API_BASE_URL}/admin-portal/v1/cms/legal-policy-content/`,
+      {
+        method: 'PUT',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to update Legal & Policy page content');
+    }
+  }
+
+  // Contact Page
+  async getContactPageContent(): Promise<any> {
+    const response = await fetch(
+      `${API_BASE_URL}/admin-portal/v1/cms/contact-content/`
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch Contact page content');
+    }
+
+    const result = await response.json();
+    return result.data || result;
+  }
+
+  async updateContactPageContent(data: Partial<any>): Promise<void> {
+    const response = await fetch(
+      `${API_BASE_URL}/admin-portal/v1/cms/contact-content/`,
+      {
+        method: 'PUT',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to update Contact page content');
+    }
+  }
+
   async updateHomepage(data: Partial<any>): Promise<void> {
     const response = await fetch(
       `${API_BASE_URL}/admin-portal/v1/cms/homepage/`,
@@ -253,6 +398,96 @@ export class CMSService {
       const errorText = await response.text();
       console.error('FAQ update failed:', response.status, errorText);
       throw new Error(`Failed to update FAQ: ${response.status}`);
+    }
+  }
+
+  // Service Stages
+  async updateServiceStage(id: number, data: Partial<any>): Promise<void> {
+    const response = await fetch(
+      `${API_BASE_URL}/admin-portal/v1/cms/service-stages/${id}/`,
+      {
+        method: 'PUT',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Service stage update failed:', response.status, errorText);
+      throw new Error(`Failed to update service stage: ${response.status}`);
+    }
+  }
+
+  // Service Pillars
+  async updateServicePillar(id: number, data: Partial<any>): Promise<void> {
+    const response = await fetch(
+      `${API_BASE_URL}/admin-portal/v1/cms/service-pillars/${id}/`,
+      {
+        method: 'PUT',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Service pillar update failed:', response.status, errorText);
+      throw new Error(`Failed to update service pillar: ${response.status}`);
+    }
+  }
+
+  // Process Steps
+  async updateProcessStep(id: number, data: Partial<any>): Promise<void> {
+    const response = await fetch(
+      `${API_BASE_URL}/admin-portal/v1/cms/process-steps/${id}/`,
+      {
+        method: 'PUT',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Process step update failed:', response.status, errorText);
+      throw new Error(`Failed to update process step: ${response.status}`);
+    }
+  }
+
+  // Content Cards
+  async updateContentCard(id: number, data: Partial<any>): Promise<void> {
+    const response = await fetch(
+      `${API_BASE_URL}/admin-portal/v1/cms/content-cards/${id}/`,
+      {
+        method: 'PUT',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Content card update failed:', response.status, errorText);
+      throw new Error(`Failed to update content card: ${response.status}`);
+    }
+  }
+
+  // Policy Items
+  async updatePolicyItem(id: number, data: Partial<any>): Promise<void> {
+    const response = await fetch(
+      `${API_BASE_URL}/admin-portal/v1/cms/policy-items/${id}/`,
+      {
+        method: 'PUT',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Policy item update failed:', response.status, errorText);
+      throw new Error(`Failed to update policy item: ${response.status}`);
     }
   }
 }

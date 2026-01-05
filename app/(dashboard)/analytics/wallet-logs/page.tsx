@@ -103,15 +103,27 @@ export default function WalletLogsPage() {
           fetch('https://orr-backend-web-latest.onrender.com/admin-portal/v1/wallet-logs/audit-trail/')
         ]);
         
-        if (logsRes.ok && analyticsRes.ok && auditRes.ok) {
+        if (logsRes.ok) {
           const logs = await logsRes.json();
-          const analytics = await analyticsRes.json();
-          const audit = await auditRes.json();
           setTransactionLogs(logs.data || logs);
+        } else {
+          console.error('Logs API Error:', logsRes.status);
+        }
+        
+        if (analyticsRes.ok) {
+          const analytics = await analyticsRes.json();
           setActivityAnalytics(analytics.data || analytics);
+        } else {
+          console.error('Analytics API Error:', analyticsRes.status);
+          const errorText = await analyticsRes.text();
+          console.error('Analytics error details:', errorText);
+        }
+        
+        if (auditRes.ok) {
+          const audit = await auditRes.json();
           setAuditTrail(audit.data || audit);
         } else {
-          console.error('API Error:', logsRes.status, analyticsRes.status, auditRes.status);
+          console.error('Audit API Error:', auditRes.status);
         }
       } catch (error) {
         console.error('Error fetching wallet logs:', error);

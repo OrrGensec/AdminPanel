@@ -88,11 +88,44 @@ export default function ContentManagement() {
 
   return (
     <div className="min-h-screen bg-[#0B2E4E]">
-      {/* Logout Button */}
-      <div className="fixed top-4 right-4 z-50">
+      {/* Navigation and Logout */}
+      <div className="fixed top-4 right-4 z-50 flex gap-4">
+        <div className="bg-card rounded-lg p-4 shadow-lg">
+          <h3 className="text-white font-semibold mb-3">Content Sections</h3>
+          <div className="space-y-2">
+            <a href="/content-management/how-we-operate" className="block text-[#33FF99] hover:text-white transition-colors text-sm">
+              How We Operate
+            </a>
+            <div className="relative group">
+              <a href="/content-management/services" className="block text-[#33FF99] hover:text-white transition-colors text-sm cursor-pointer">
+                Services ▼
+              </a>
+              <div className="absolute left-0 top-6 bg-[#1a3a52] rounded-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 min-w-[200px]">
+                <a href="/content-management/services/living-systems-regeneration" className="block text-gray-300 hover:text-[#33FF99] transition-colors text-xs py-1">
+                  Living Systems Regeneration
+                </a>
+                <a href="/content-management/services/operational-systems-infrastructure" className="block text-gray-300 hover:text-[#33FF99] transition-colors text-xs py-1">
+                  Operational Systems Infrastructure
+                </a>
+                <a href="/content-management/services/strategy-advisory-compliant" className="block text-gray-300 hover:text-[#33FF99] transition-colors text-xs py-1">
+                  Strategy Advisory Compliant
+                </a>
+              </div>
+            </div>
+            <a href="/content-management/resources-blogs" className="block text-[#33FF99] hover:text-white transition-colors text-sm">
+              Resources & Blogs
+            </a>
+            <a href="/content-management/legal-policy" className="block text-[#33FF99] hover:text-white transition-colors text-sm">
+              Legal & Policy
+            </a>
+            <a href="/content-management/contact" className="block text-[#33FF99] hover:text-white transition-colors text-sm">
+              Contact
+            </a>
+          </div>
+        </div>
         <button
           onClick={handleLogout}
-          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-lg transition-colors"
+          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-lg transition-colors h-fit"
         >
           Logout
         </button>
