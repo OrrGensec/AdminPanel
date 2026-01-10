@@ -12,7 +12,7 @@ function layout({ children }: { children: React.ReactNode }) {
   return (
     <ProtectedRoute>
       <NotificationProvider>
-        <div className="flex flex-col md:flex-row min-h-screen relative">
+        <div className="flex flex-col md:flex-row max-h-screen relative">
           <Sidebar isOpen={isMobileMenuOpen} onClose={() => setIsMobileMenuOpen(false)} />
           <div className="flex-1 w-full overflow-x-hidden flex flex-col">
             <Header onMenuClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
